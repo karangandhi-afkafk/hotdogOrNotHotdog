@@ -40,19 +40,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // 1. Select the image
         // 2. Convert this image from UIImage data type into CIImage
         // 3. Detect (CIImage)
-        if let image = info[.originalImage] as? UIImage {
-            imageView.image = image
-            
-            // Convert to CIImage
-            imagePicker.dismiss(animated: true, completion: nil)
-            
-            guard let ciImage = CIImage(image: image) else {
-                fatalError("Failed to convert UIImage to CIImage.")
-            }
-            
-            detect(image: ciImage)
-        }
-    }
+    
+        
+        
     
     // Detect function:
     // 1. Model
@@ -62,35 +52,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func detect(image: CIImage) {
         // Initialize Model
-        if let model = try? VNCoreMLModel(for: Inceptionv3().model) {
+      
             // Request
-            let request = VNCoreMLRequest(model: model, completionHandler: { (request, error) in
+      
                 // Results -> (0.8, 0.7, 0.3) -> 0.8: Hot Dog
-                guard let results = request.results as? [VNClassificationObservation], let topResult = results.first else {
-                    fatalError("Could not get the correct data classification value.")
-                }
-                
-                if topResult.identifier.contains("hotdog") {
-                    // Using main thread
-                    DispatchQueue.main.async {
-                        self.navigationItem.title = "Hotdog"
-                    }
-                }
-                else {
-                    DispatchQueue.main.async {
-                        self.navigationItem.title = "Not Hotdog!"
-                    }
-                }
-            })
+               
             
-            // Handler
-            let handler = VNImageRequestHandler(ciImage: image)
-            do {
-                try handler.perform([request])
-            }
-            catch {
-                print(error)
-            }
             
         }
         
